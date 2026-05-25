@@ -1,0 +1,29 @@
+# Entornos virtuales
+venv/
+.venv/
+env/
+ENV/
+
+# Caché de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Variables de entorno secretas
+.env
+
+# Archivos temporales y del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Salidas de compilación y empaquetado (si aplican)
+build/
+dist/
+*.egg-info/
+
+# Archivos de salida generados localmente por los estudiantes
+output/*
+# Mantener el directorio output pero no sus archivos generados
+!output/.gitkeep
