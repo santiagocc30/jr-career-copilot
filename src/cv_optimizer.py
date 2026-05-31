@@ -62,6 +62,16 @@ def parse_arguments() -> argparse.Namespace:
         default="templates/cv_template.html",
         help="Ruta a la plantilla HTML Jinja2 (por defecto: templates/cv_template.html)."
     )
+    parser.add_argument(
+        "--mock-interview",
+        action="store_true",
+        help="Activa la simulación de entrevista técnica al finalizar la optimización del CV."
+    )
+    parser.add_argument(
+        "--robustness",
+        action="store_true",
+        help="Evalúa la robustez del CV optimizado con el panel de expertos IA al finalizar."
+    )
     return parser.parse_args()
 
 def main() -> None:
@@ -104,6 +114,36 @@ def main() -> None:
     print("=" * 60)
     print("¡Proceso finalizado con éxito! Éxito en tu postulación laboral.")
     print("=" * 60)
+
+    # 8. Evaluación de robustez (opcional)
+    if args.robustness:
+        try:
+            from robustness_judge import evaluate_cv_robustness, print_robustness_report, export_report_to_markdown
+        except ModuleNotFoundError:
+            print("\n[ERROR] No se encontró el módulo 'robustness_judge.py'.") 
+            print("        Asegúrate de que el archivo existe en src/robustness_judge.py")
+            sys.exit(1)
+
+        print("\n[INFO] Evaluando robustez del CV con el panel de expertos IA...")
+        report = evaluate_cv_robustness(markdown_content, job_description, profile, args.lang)
+        print_robustness_report(report)
+        export_report_to_markdown(report)
+
+    # 9. Simulación de entrevista (opcional)
+    if args.mock_interview:
+        try:
+            from mock_interview import run_interactive_session
+        except ModuleNotFoundError:
+            print("\n[ERROR] No se encontró el módulo 'mock_interview.py'.")
+            print("        Asegúrate de que el archivo existe en src/mock_interview.py")
+            sys.exit(1)
+
+        run_interactive_session(
+            profile=profile,
+            job_description=job_description,
+            num_questions=5,
+            lang=args.lang
+        )
 
 if __name__ == "__main__":
     main()
